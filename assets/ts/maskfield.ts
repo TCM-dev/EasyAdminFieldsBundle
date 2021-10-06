@@ -11,20 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const getValue = (maskfield: Element) => {
-  const items = maskfield.querySelector(".items");
+  const item = maskfield.querySelector(".item");
 
   // If expanded option is used
-  if (!items) {
+  if (!item) {
     const radios: NodeListOf<HTMLInputElement> =
       maskfield.querySelectorAll(".form-check input");
 
     return Array.from(radios).find((radio) => radio.checked === true).value;
-  }
-
-  const item = maskfield.querySelector(".item");
-
-  if (!item) {
-    return "";
   }
 
   return item.getAttribute("data-value");
