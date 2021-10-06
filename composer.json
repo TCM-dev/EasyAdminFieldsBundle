@@ -1,0 +1,25 @@
+{
+  "name": "insitaction/easyadmin-fields-bundle",
+  "description": "Set of easyadmin fields and useful helpers for Insitaction",
+  "type": "symfony-bundle",
+  "require": {
+    "php": ">=7.4",
+    "symfony/framework-bundle": "^5.2",
+    "easycorp/easyadmin-bundle": "^3.5"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
+  },
+  "autoload": {
+    "psr-4": {
+      "Insitaction\\EasyAdminFieldsBundle\\": "src/"
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Valentin Wojtasinski",
+      "email": "vwojtasinski@insitaction.com"
+    }
+  ]
+}

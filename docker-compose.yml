@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - './:/usr/src/app'
+    restart: on-failure
+    user: 1000:1000
