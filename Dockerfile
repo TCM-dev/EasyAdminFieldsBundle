@@ -11,7 +11,9 @@ libzip-dev \
 libfreetype6-dev \
 libjpeg62-turbo-dev \
 libpng-dev \
-libxslt-dev
+libxslt-dev \
+nodejs \
+npm
 
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
@@ -26,6 +28,8 @@ RUN cd /usr/local/etc/php/conf.d/ && \
 WORKDIR /usr/src/app
 
 COPY --chown=1000:1000 ./ /usr/src/app
+RUN mkdir "/.npm"
+RUN chown -R 1000:1000 "/.npm"
 
 RUN PATH=$PATH:/usr/src/app/vendor/bin:bin
 

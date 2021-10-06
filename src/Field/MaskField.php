@@ -40,7 +40,6 @@ final class MaskField
             ->setFormType(ChoiceType::class)
             ->addCssClass('field-select')
             ->addCssClass("maskfield maskfield-$uniqID")
-            ->addJsFiles('assets/js/maskfield.js')
             ->setCustomOption(self::OPTION_CHOICES, null)
             ->setCustomOption(self::OPTION_RENDER_AS_BADGES, null)
             ->setCustomOption(self::OPTION_RENDER_EXPANDED, false)
