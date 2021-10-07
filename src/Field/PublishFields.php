@@ -4,7 +4,7 @@ namespace Insitaction\EasyAdminFieldsBundle\Field;
 
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 
-class PublishField
+class PublishFields
 {
     public static function new(): array
     {
