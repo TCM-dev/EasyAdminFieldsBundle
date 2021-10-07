@@ -1,3 +1,4 @@
 {
-  "bundles/easyadmin-fields/main.js": "./main.js"
+  "bundles/easyadmin-fields/main.js": "./main.js",
+  "bundles/easyadmin-fields/main.js.map": "./main.js.map"
 }

@@ -1,3 +1,5 @@
+// TODO create custom template and load map html there
+
 document.addEventListener("DOMContentLoaded", () => {
   // Find every concerned maskfields
   const maskfields = document.querySelectorAll(".maskfield");
@@ -49,7 +51,7 @@ const getUniqueFieldsName = (maskfield: Element) => {
   map.forEach((mapObject) => fieldsName.push(...mapObject.values));
 
   // Remove duplicates
-  return map.filter((elem, index, self) => index === self.indexOf(elem));
+  return fieldsName.filter((elem, index, self) => index === self.indexOf(elem));
 };
 
 const getMapFields = (maskfield: Element) => {

@@ -130,7 +130,7 @@ final class MaskField
 
     public function map(array $map): self
     {
-        $this->addHtmlContentsToBody($this->getMapHTML($map));
+        $this->addHtmlContentsToHead($this->getMapHTML($map));
 
         return $this;
     }
