@@ -1,6 +1,6 @@
 <?php
 
-namespace Insitaction\EasyAdminFieldsBundle\Traits;
+namespace Insitaction\EasyAdminFieldsBundle\Field;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Insitaction\EasyAdminFieldsBundle\Interfaces;
+namespace Insitaction\EasyAdminFieldsBundle\Field;
 
 interface PublishableInterface
 {
