@@ -3,6 +3,7 @@
 namespace Insitaction\EasyAdminFieldsBundle\Field;
 
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use Insitaction\EasyAdminFieldsBundle\Enum\EnumPublishable;
 
 class PublishFields
 {
@@ -10,15 +11,10 @@ class PublishFields
     {
         return [
             MaskField::new('status')
-                ->setChoices([
-                    "Brouillon" => "DRAFT",
-                    "Publié" => "PUBLISHED",
-                    "Archivé" => "ARCHIVED",
-                    "Programmé" => "PROGRAMMED"
-                ])
+                ->setChoices(EnumPublishable::getChoices())
                 ->map([
-                    "PROGRAMMED" => ['published_at', 'archived_at'],
-                    "PUBLISHED" => ['archived_at'],
+                    EnumPublishable::PROGRAMMED => ['published_at', 'archived_at'],
+                    EnumPublishable::PUBLISHED => ['archived_at'],
                 ]),
             DateField::new('published_at'),
             DateField::new('archived_at'),
