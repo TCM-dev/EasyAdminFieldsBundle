@@ -11,13 +11,14 @@ class PublishFields
     {
         return [
             MaskField::new('status')
+                ->setLabel('label.status')
                 ->setChoices(EnumPublishable::getChoices())
                 ->map([
                     EnumPublishable::PROGRAMMED => ['published_at', 'archived_at'],
                     EnumPublishable::PUBLISHED => ['archived_at'],
                 ]),
-            DateField::new('published_at'),
-            DateField::new('archived_at'),
+            DateField::new('published_at')->setLabel('label.published_at'),
+            DateField::new('archived_at')->setLabel('label.archived_at'),
         ];
     }
 }

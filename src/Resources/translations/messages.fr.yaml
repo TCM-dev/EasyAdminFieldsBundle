@@ -1,3 +1,8 @@
+label:
+  status: "Statut"
+  published_at: "Publié le"
+  archived_at: "Archivé le"
+
 status:
   draft: "Brouillon"
   archived: "Archivé"
