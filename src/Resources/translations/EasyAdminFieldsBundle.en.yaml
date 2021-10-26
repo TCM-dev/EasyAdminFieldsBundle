@@ -1,0 +1,5 @@
+status:
+  draft: "Draft"
+  archived: "Archived"
+  published: "Published"
+  programmed: "Programmed"

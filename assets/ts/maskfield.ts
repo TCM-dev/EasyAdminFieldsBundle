@@ -1,8 +1,6 @@
-// TODO create custom template and load map html there
-
 document.addEventListener("DOMContentLoaded", () => {
   // Find every concerned maskfields
-  const maskfields = document.querySelectorAll(".maskfield");
+  const maskfields = document.querySelectorAll(".maskfield.form-group");
 
   // Handle every fields once and listen for change event to handle them
   maskfields.forEach((maskfield) => {
@@ -12,18 +10,40 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-const getValue = (maskfield: Element) => {
-  const item = maskfield.querySelector(".item");
+const isSelect = (maskfield: Element) => {
+  return maskfield.querySelector("select");
+};
 
+const isRadio = (maskfield: Element) => {
+  return maskfield.querySelector(".form-check input");
+};
+
+const getValue = (maskfield: Element) => {
   // If expanded option is used
-  if (!item) {
+  if (isRadio(maskfield)) {
     const radios: NodeListOf<HTMLInputElement> =
       maskfield.querySelectorAll(".form-check input");
 
-    return Array.from(radios).find((radio) => radio.checked === true).value;
+    const checked = Array.from(radios).find((radio) => radio.checked === true);
+
+    if (!checked) {
+      return "";
+    }
+
+    return checked.value;
   }
 
-  return item.getAttribute("data-value");
+  if (isSelect(maskfield)) {
+    const item = maskfield.querySelector(".item");
+
+    if (!item) {
+      return "";
+    }
+
+    return item.getAttribute("data-value");
+  }
+
+  return "";
 };
 
 const getMap = (maskfield: Element) => {
@@ -90,7 +110,9 @@ const handleMapFields = (maskfield: Element, value: string) => {
     const fieldNameID = fieldInput.id.substring(parentForm.name.length + 1);
 
     if (!visibleFields.includes(fieldNameID)) {
+      // Hide and clear input
       field.style.display = "none";
+      fieldInput.value = undefined;
       return;
     }
 

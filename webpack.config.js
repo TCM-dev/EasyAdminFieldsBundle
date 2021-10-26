@@ -6,7 +6,7 @@ Encore
     .setManifestKeyPrefix('bundles/easyadmin-fields')
 
     .cleanupOutputBeforeBuild()
-    .enableSourceMaps(false)
+    .enableSourceMaps(true)
     .enableVersioning(false)
     .disableSingleRuntimeChunk()
     .enableTypeScriptLoader()
