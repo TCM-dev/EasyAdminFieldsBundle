@@ -1,0 +1,38 @@
+.image-preview {
+    max-width: 400px;
+    max-height: 400px;
+    margin-top: 1em;
+}
+
+.eaf-lightbox-thumbnail img:hover {
+    cursor: zoom-in;
+}
+
+.eaf-lightbox {
+    display: none;
+}
+
+.eaf-lightbox img {
+    max-width: 100%;
+    width: 100%;
+}
+
+.new .field-image-preview .form-control, .edit .field-image-preview .form-control {
+    background: transparent;
+    border: 0;
+    height: auto;
+    padding: 0;
+}
+
+.ea-new .field-image-preview img, .ea-edit .field-image-preview img {
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
+    max-height: 300px;
+    max-width: 400px;
+    padding: 8px;
+    margin-top: 16px;
+}
+
+.ea-new .field-image-preview img:hover, .ea-edit .field-image-preview img:hover {
+    border-color: var(--datalist-border-color);
+}

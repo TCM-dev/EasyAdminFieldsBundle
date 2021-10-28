@@ -4,6 +4,15 @@
       "js": [
         "./main.js"
       ]
+    },
+    "app": {
+      "css": [
+        "./app.css",
+        "./app.rtl.css"
+      ],
+      "js": [
+        "./app.js"
+      ]
     }
   }
 }
