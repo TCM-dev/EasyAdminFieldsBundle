@@ -20,4 +20,15 @@ trait LoggableTrait
 
         return $this;
     }
+    
+    /**
+     * @param array{type: string, content: string, filename?: string} $log
+     * @return $this
+     */
+    public function addLog(array $log): self
+    {
+        $this->logs[] = $log;
+
+        return $this;
+    }
 }
