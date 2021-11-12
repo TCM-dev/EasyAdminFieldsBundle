@@ -1,0 +1,26 @@
+<table>
+    <tr>
+        <th class="type">Type</th>
+        <th>Content</th>
+    </tr>
+    {% for row in field.value %}
+        <tr class="log log--{{ row.type }}">
+            <td class="type">{{ row.type }}</td>
+            <td>
+                {% if row.type == 'DEBUG' %}
+                    <code>
+                        {{ row.content }}
+                    </code>
+                {% else %}
+                    <p>
+                        {{ row.content }}
+                        {% if row.fileName is defined and row.fileName is not null %}
+                            <br/>
+                            <a href="{{ asset("screenshots/" ~ row.fileName) }}">Picture</a>
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

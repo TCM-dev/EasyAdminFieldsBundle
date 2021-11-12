@@ -1,0 +1,44 @@
+.field-logs table {
+    width: 100%;
+}
+
+.field-logs .log td, .field-logs .log th {
+    padding: 0.5em;
+    line-height: 1.75;
+}
+
+.field-logs .log p {
+    margin-bottom: 0;
+}
+
+.field-logs .log code {
+    background: #333;
+    padding: 1em;
+    border-radius: 5px;
+    color: #b8b1fc;
+    white-space: nowrap;
+    display: block;
+}
+
+.field-logs .log--ERROR {
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.field-logs .log--SUCCESS {
+    background: rgba(0, 255, 0, 0.05);
+}
+
+.field-logs .log--WARNING {
+    background: rgba(255, 227, 15, 0.1);
+}
+
+@media screen and (max-width: 400px) {
+    .field-logs {
+        display: flex !important;
+        flex-direction: column;
+    }
+
+    .field-logs .type {
+        display: none;
+    }
+}

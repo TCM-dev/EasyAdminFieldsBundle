@@ -1,12 +1,12 @@
 {
-  "version": "1.0.10",
+  "version": "1.1.0",
   "name": "insitaction/easyadmin-fields-bundle",
   "description": "Set of easyadmin fields and useful helpers for Insitaction",
   "type": "symfony-bundle",
   "require": {
     "php": ">=7.4",
-    "symfony/framework-bundle": "^5.2",
-    "easycorp/easyadmin-bundle": "^3.5"
+    "symfony/framework-bundle": "^5",
+    "easycorp/easyadmin-bundle": "^3"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
