@@ -6,19 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait PublishableTrait
 {
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    #[ORM\Column(type: "datetime_immutable", nullable: true)]
     private $published_at;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    #[ORM\Column(type: "datetime_immutable", nullable: true)]
     private $archived_at;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private $status;
 
     public function getPublishedAt(): ?\DateTimeImmutable
