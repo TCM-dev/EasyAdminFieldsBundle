@@ -142,12 +142,21 @@ final class MaskField
         $body = "<div class='maskfield-map maskfield-map-$uniqID'>";
 
         foreach ($map as $key => $items) {
-            $json_values = json_encode($items);
+            $json_values = $this->getJSONValuesFromItems($items);
             $body .= "<div data-key='$key' data-values='$json_values'></div>";
         }
 
         $body .= "</div>";
 
         return $body;
+    }
+
+    private function getJSONValuesFromItems(array $items): string
+    {
+        $json = json_encode($items);
+        $json = explode('.', $json);
+        $json = implode('_', $json);
+
+        return $json;
     }
 }

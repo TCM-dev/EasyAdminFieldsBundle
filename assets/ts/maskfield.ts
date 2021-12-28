@@ -118,7 +118,7 @@ class Maskfield {
     const visibleFields = selectedMapObject ? selectedMapObject.values : [];
 
     fields.forEach((field) => {
-      const fieldInput = field.querySelector("input");
+      const fieldInput: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement = field.querySelector("input, textarea, select");
       const fieldNameID = fieldInput.id.substring(parentForm.name.length + 1);
 
       if (!visibleFields.includes(fieldNameID)) {
