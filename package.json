@@ -1,8 +1,10 @@
 {
   "devDependencies": {
     "@symfony/webpack-encore": "^1.6.1",
+    "@types/axios": "^0.14.0",
     "@types/basiclightbox": "^5.0.1",
     "@types/uuid": "^8.3.1",
+    "madge": "^5.0.1",
     "sass": "^1.43.4",
     "sass-loader": "^12.3.0",
     "ts-loader": "^9.2.6",
@@ -15,7 +17,9 @@
     "build": "encore production"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "basiclightbox": "^5.0.4",
+    "tom-select": "^2.0.0",
     "uuid": "^8.3.2",
     "webpack-rtl-plugin": "^2.0.0"
   }
