@@ -10,7 +10,7 @@ export const getValueFromFormGroup = (formGroup: Element) => {
     const radios: NodeListOf<HTMLInputElement> = formGroup.querySelectorAll('.form-check input[type="radio"]')
 
     if (radios.length > 0) {
-        return Array.from(radios).find(radio => radio.checked).value
+        return Array.from(radios).find(radio => radio.checked)?.value
     }
 
     // Non circular reference way to get value from a form group

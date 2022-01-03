@@ -7,7 +7,7 @@ import TextareaField from "./classes/textarea-field";
 
 document.addEventListener("DOMContentLoaded", () => {
     // Find every concerned fields
-    const fields = document.querySelectorAll(".field-dependent.field-select");
+    const fields = document.querySelectorAll(".field-dependent.field-select, .field-dependent.field-association");
 
     // Handle every fields once and listen for change event to handle them
     fields.forEach((field) => {
@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
         dependantField.init()
     });
 });
-
 
 class DependentField extends ChoiceField {
 
@@ -36,14 +35,12 @@ class DependentField extends ChoiceField {
     handleDependenceChange = async () => {
         // @ts-ignore
         const control: TomSelect = this.field.querySelector('select').tomselect;
-
         const formGroup = this.getDependence()
-
-
         const value = getValueFromFormGroup(formGroup);
         const data = await this.fetchData(value)
 
         control.clearOptions()
+        control.clear()
         control.addOptions(data)
         control.settings.maxOptions = data.length
     }
