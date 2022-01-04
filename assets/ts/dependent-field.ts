@@ -39,8 +39,8 @@ class DependentField extends ChoiceField {
         const value = getValueFromFormGroup(formGroup);
         const data = await this.fetchData(value)
 
-        control.clearOptions()
         control.clear()
+        control.clearOptions()
         control.addOptions(data)
         control.settings.maxOptions = data.length
     }
