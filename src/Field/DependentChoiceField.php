@@ -33,14 +33,13 @@ final class DependentChoiceField
     public static function new(string $propertyName, $label = null): self
     {
         $self = new self();
-        $uniqID = $self->getAsDto()->getUniqueId();
 
         return $self
             ->setProperty($propertyName)
             ->setLabel($label)
             ->setFormType(ChoiceType::class)
             ->addCssClass('field-select')
-            ->addCssClass("field-dependent uniqID-$uniqID")
+            ->addCssClass("field-dependent")
             ->setCustomOption(self::OPTION_CHOICES, null)
             ->setCustomOption(self::OPTION_RENDER_AS_BADGES, null)
             ->setCustomOption(self::OPTION_RENDER_EXPANDED, false)
@@ -138,29 +137,27 @@ final class DependentChoiceField
 
     public function setCallbackURL(string $url): self
     {
-        $this->addHtmlContentsToHead($this->getCallbackURLHTML($url));
+        $this->setFormTypeOption('attr.data-eaf-callback-url', $url);
 
         return $this;
     }
 
-    public function setDependance(string $propertyName): self
+    public function setDependence(string $propertyName): self
     {
-        $this->addHtmlContentsToHead($this->getDependanceHTML($propertyName));
+        $this->setFormTypeOption('attr.data-eaf-dependencies', json_encode([$propertyName], JSON_THROW_ON_ERROR));
 
         return $this;
     }
 
-    private function getCallbackURLHTML(string $url): string
+    /**
+     * @param string[] $propertyNames
+     * @return $this
+     * @throws \JsonException
+     */
+    public function setDependencies(array $propertyNames): self
     {
-        $uniqID = $this->dto->getUniqueId();
+        $this->setFormTypeOption('attr.data-eaf-dependencies', json_encode($propertyNames, JSON_THROW_ON_ERROR));
 
-        return "<div data-field='dependent-choice-field' data-uniq-id='$uniqID' data-key='url' data-value='$url'></div>";
-    }
-
-    private function getDependanceHTML(string $propertyName): string
-    {
-        $uniqID = $this->dto->getUniqueId();
-
-        return "<div data-field='dependent-choice-field' data-uniq-id='$uniqID' data-key='propertyName' data-value='$propertyName'></div>";
+        return $this;
     }
 }

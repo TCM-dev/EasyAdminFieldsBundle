@@ -1,11 +1,14 @@
 import ChoiceField from "./classes/choice-field";
-import {findFieldFormGroup, getValueFromFormGroup} from "./utils/helpers";
+import {findFieldFormGroup, getValueFromFormGroup, isEditPage, isFormPage} from "./utils/helpers";
 import axios from 'axios'
 import TomSelect from "tom-select";
 import {TomOption} from "tom-select/dist/types/types";
-import TextareaField from "./classes/textarea-field";
 
 document.addEventListener("DOMContentLoaded", () => {
+    if (!isFormPage()) {
+        return;
+    }
+
     // Find every concerned fields
     const fields = document.querySelectorAll(".field-dependent.field-select, .field-dependent.field-association");
 
@@ -20,40 +23,67 @@ document.addEventListener("DOMContentLoaded", () => {
 class DependentField extends ChoiceField {
 
     init = async () => {
-        const field = this.getDependence()
+        const fields = this.getDependencies()
 
-        field.addEventListener("input", this.handleDependenceChange);
-        await this.handleDependenceChange();
+        fields.forEach(field => {
+            const formGroup = findFieldFormGroup(field)
+            formGroup.addEventListener("input", this.handleDependenceChange);
+        })
+
+        const data = await this.getData()
+        if (!isEditPage()) {
+            this.clear()
+        }
+        this.setOptions(data)
     }
 
-    getDependence = () => {
-        const propertyName = this.getCustomValue('propertyName');
+    getDependencies = () => {
+        const dependenciesJSON = this.getAttribute('dependencies');
 
-        return findFieldFormGroup(propertyName);
+        const dependencies: string[] = JSON.parse(dependenciesJSON);
+
+        return dependencies;
     }
 
     handleDependenceChange = async () => {
+        const data = await this.getData()
+        this.clear()
+        this.setOptions(data)
+    }
+
+    getData = async () => {
+        const fields = this.getDependencies()
+        const params: any = {}
+
+        fields.forEach(field => {
+            const formGroup = findFieldFormGroup(field)
+            params[field] = getValueFromFormGroup(formGroup);
+        })
+
+        return await this.fetchData(params)
+    }
+
+    clear = () => {
         // @ts-ignore
         const control: TomSelect = this.field.querySelector('select').tomselect;
-        const formGroup = this.getDependence()
-        const value = getValueFromFormGroup(formGroup);
-        const data = await this.fetchData(value)
-
         control.clear()
+    }
+
+    setOptions = (data: TomOption[]) => {
+        // @ts-ignore
+        const control: TomSelect = this.field.querySelector('select').tomselect;
         control.clearOptions()
         control.addOptions(data)
         control.settings.maxOptions = data.length
     }
 
-    fetchData = async (value: any) => {
-        const url = this.getCustomValue('url');
+    fetchData = async (params: any) => {
+        const url = this.getAttribute('callback-url');
 
         let data: TomOption[] = [];
 
         await axios(url, {
-            params: {
-                value
-            }
+            params
         })
             .then(response => data = response.data)
             .catch(error => console.log(error))

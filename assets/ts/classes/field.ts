@@ -1,5 +1,3 @@
-import {findCustomValue} from "../utils/helpers";
-
 export default abstract class Field {
     protected field: Element;
 
@@ -7,12 +5,10 @@ export default abstract class Field {
         this.field = formGroupElement;
     }
 
-    getUniqID = () => {
-        return this.field.classList.item(2).substring(7);
-    }
+    getAttribute = (key: string) => {
+        const fieldElement = this.field.querySelector('.form-widget > *')
 
-    getCustomValue = (key: string) => {
-        return findCustomValue(this, key)
+        return fieldElement.getAttribute('data-eaf-' + key)
     }
 
     getValue = (): string | string[] => {

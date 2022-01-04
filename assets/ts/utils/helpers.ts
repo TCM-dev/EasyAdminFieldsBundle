@@ -1,5 +1,3 @@
-import Field from "../classes/field";
-
 export const getValueFromFormGroup = (formGroup: Element) => {
     const checkboxes: NodeListOf<HTMLInputElement> = formGroup.querySelectorAll('.form-check input[type="checkbox"]')
 
@@ -29,12 +27,26 @@ export const findFieldFormGroup = (propertyName: string) => {
     return element.closest('.form-group');
 }
 
-export const findCustomValue = (field: Field, key: string) => {
-    const element = document.querySelector(`[data-uniq-id="${field.getUniqID()}"][data-key="${key}"]`)
+export const isCreatePage = () => {
+    // This may need to be improved to check based on parent form instead of body
 
-    if (!element) {
-        return null;
-    }
+    return document.body.classList.contains('ea-new');
+}
 
-    return element.getAttribute('data-value');
+export const isEditPage = () => {
+    // This may need to be improved to check based on parent form instead of body
+
+    return document.body.classList.contains('ea-edit');
+}
+
+export const isDetailPage = () => {
+    // This may need to be improved to check based on parent form instead of body
+
+    return document.body.classList.contains('ea-detail');
+}
+
+export const isFormPage = () => {
+    // This may need to be improved to check based on parent form instead of body
+
+    return isCreatePage() || isEditPage();
 }

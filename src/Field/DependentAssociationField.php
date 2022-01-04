@@ -35,7 +35,6 @@ final class DependentAssociationField
     public static function new(string $propertyName, $label = null): self
     {
         $self = new self();
-        $uniqID = $self->getAsDto()->getUniqueId();
 
         return $self
             ->setProperty($propertyName)
@@ -43,7 +42,7 @@ final class DependentAssociationField
             ->setTemplateName('crud/field/association')
             ->setFormType(EntityType::class)
             ->addCssClass('field-association')
-            ->addCssClass("field-dependent uniqID-$uniqID")
+            ->addCssClass("field-dependent")
             ->setDefaultColumns('col-md-7 col-xxl-6')
             ->setCustomOption(self::OPTION_AUTOCOMPLETE, false)
             ->setCustomOption(self::OPTION_CRUD_CONTROLLER, null)
@@ -85,29 +84,27 @@ final class DependentAssociationField
 
     public function setCallbackURL(string $url): self
     {
-        $this->addHtmlContentsToHead($this->getCallbackURLHTML($url));
+        $this->setFormTypeOption('attr.data-eaf-callback-url', $url);
 
         return $this;
     }
 
-    public function setDependance(string $propertyName): self
+    public function setDependence(string $propertyName): self
     {
-        $this->addHtmlContentsToHead($this->getDependanceHTML($propertyName));
+        $this->setFormTypeOption('attr.data-eaf-dependencies', json_encode([$propertyName], JSON_THROW_ON_ERROR));
 
         return $this;
     }
 
-    private function getCallbackURLHTML(string $url): string
+    /**
+     * @param string[] $propertyNames
+     * @return $this
+     * @throws \JsonException
+     */
+    public function setDependencies(array $propertyNames): self
     {
-        $uniqID = $this->dto->getUniqueId();
+        $this->setFormTypeOption('attr.data-eaf-dependencies', json_encode($propertyNames, JSON_THROW_ON_ERROR));
 
-        return "<div data-field='dependent-association-field' data-uniq-id='$uniqID' data-key='url' data-value='$url'></div>";
-    }
-
-    private function getDependanceHTML(string $propertyName): string
-    {
-        $uniqID = $this->dto->getUniqueId();
-
-        return "<div data-field='dependent-association-field' data-uniq-id='$uniqID' data-key='propertyName' data-value='$propertyName'></div>";
+        return $this;
     }
 }
