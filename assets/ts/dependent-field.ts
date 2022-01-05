@@ -9,6 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    createDependentFields()
+
+    // Add events to new items added in collection field
+    document.addEventListener('ea.collection.item-added', () => createDependentFields());
+});
+
+const createDependentFields = () => {
     // Find every concerned fields
     const fields = document.querySelectorAll(".field-dependent.field-select, .field-dependent.field-association");
 
@@ -18,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dependantField.init()
     });
-});
+}
 
 class DependentField extends ChoiceField {
 
@@ -27,13 +34,11 @@ class DependentField extends ChoiceField {
 
         fields.forEach(field => {
             const formGroup = findFieldFormGroup(field)
+            formGroup.removeEventListener("input", this.handleDependenceChange);
             formGroup.addEventListener("input", this.handleDependenceChange);
         })
 
         const data = await this.getData()
-        if (!isEditPage()) {
-            this.clear()
-        }
         this.setOptions(data)
     }
 
@@ -64,12 +69,14 @@ class DependentField extends ChoiceField {
     }
 
     clear = () => {
+        // won't work with native or expanded input
         // @ts-ignore
         const control: TomSelect = this.field.querySelector('select').tomselect;
         control.clear()
     }
 
     setOptions = (data: TomOption[]) => {
+        // won't work with native or expanded input
         // @ts-ignore
         const control: TomSelect = this.field.querySelector('select').tomselect;
         control.clearOptions()
