@@ -21,6 +21,7 @@ final class LogsField implements FieldInterface
             ->setTemplatePath('@EasyAdminFields/crud/field/logs.html.twig')
             ->setFormType(TextareaType::class)
             ->addCssClass('field-logs')
+            ->setCustomOption('attr.data-eaf-upload-dir-path', "TEST")
             ->hideOnForm()
             ->hideOnIndex();
     }

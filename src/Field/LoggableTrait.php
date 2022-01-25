@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait LoggableTrait
 {
+    /**
+     * @ORM\Column(type="json")
+     */
     #[ORM\Column(type: "json")]
     private array $logs = [];
 

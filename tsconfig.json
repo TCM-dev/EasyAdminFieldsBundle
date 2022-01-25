@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "es2015",
+    "moduleResolution": "node",
     "noImplicitAny": true,
     "removeComments": true,
     "target": "ES5",
-    "sourceMap": true
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react"
   },
   "include": [
     "assets/**/*"

@@ -1,25 +1,16 @@
-import ChoiceField from "./classes/choice-field";
-import {findFieldFormGroup, getValueFromFormGroup, isEditPage, isFormPage} from "./utils/helpers";
+import ChoiceField from "../classes/choice-field";
+import {findFieldFormGroup, getValueFromFormGroup} from "../utils/helpers";
 import axios from 'axios'
 import TomSelect from "tom-select";
 import {TomOption} from "tom-select/dist/types/types";
-
-document.addEventListener("DOMContentLoaded", () => {
-    if (!isFormPage()) {
-        return;
-    }
-
-    createDependentFields()
-
-    // Add events to new items added in collection field
-    document.addEventListener('ea.collection.item-added', () => createDependentFields());
-});
+import {addFormListener} from "../utils/listeners";
+import {Action} from "../types/easyadmin";
 
 const createDependentFields = () => {
     // Find every concerned fields
     const fields = document.querySelectorAll(".field-dependent.field-select, .field-dependent.field-association");
 
-    // Handle every fields once and listen for change event to handle them
+    // Handle every fields
     fields.forEach((field) => {
         const dependantField = new DependentField(field);
 
@@ -43,9 +34,7 @@ class DependentField extends ChoiceField {
     }
 
     getDependencies = () => {
-        const dependenciesJSON = this.getAttribute('dependencies');
-
-        const dependencies: string[] = JSON.parse(dependenciesJSON);
+        const dependencies: string[] = this.getJSONAttribute('dependencies');
 
         return dependencies;
     }
@@ -99,3 +88,5 @@ class DependentField extends ChoiceField {
     }
 
 }
+
+addFormListener(createDependentFields, [Action.EDIT, Action.NEW]);

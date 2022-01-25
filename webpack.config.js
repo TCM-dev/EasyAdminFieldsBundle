@@ -12,6 +12,7 @@ Encore
     .enableVersioning(false)
     .disableSingleRuntimeChunk()
     .enableTypeScriptLoader()
+    .enableReactPreset()
 
     .addPlugin(new WebpackRTLPlugin())
 

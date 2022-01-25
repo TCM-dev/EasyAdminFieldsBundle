@@ -1,3 +1,5 @@
+import {Action} from "../types/easyadmin";
+
 export const getValueFromFormGroup = (formGroup: Element) => {
     const checkboxes: NodeListOf<HTMLInputElement> = formGroup.querySelectorAll('.form-check input[type="checkbox"]')
 
@@ -27,26 +29,37 @@ export const findFieldFormGroup = (propertyName: string) => {
     return element.closest('.form-group');
 }
 
-export const isCreatePage = () => {
-    // This may need to be improved to check based on parent form instead of body
+export const getPageAction = () => {
+    switch (true) {
+        case document.body.classList.contains('ea-detail'):
+            return Action.DETAIL
+        case document.body.classList.contains('ea-new'):
+            return Action.NEW
+        case document.body.classList.contains('ea-edit'):
+            return Action.EDIT
+        case document.body.classList.contains('ea-index'):
+            return Action.INDEX
+        default:
+            return null
+    }
+}
 
-    return document.body.classList.contains('ea-new');
+export const isCreatePage = () => {
+    return getPageAction() === Action.NEW;
 }
 
 export const isEditPage = () => {
-    // This may need to be improved to check based on parent form instead of body
-
-    return document.body.classList.contains('ea-edit');
+    return getPageAction() === Action.EDIT;
 }
 
 export const isDetailPage = () => {
-    // This may need to be improved to check based on parent form instead of body
+    return getPageAction() === Action.DETAIL;
+}
 
-    return document.body.classList.contains('ea-detail');
+export const isIndexPage = () => {
+    return getPageAction() === Action.INDEX;
 }
 
 export const isFormPage = () => {
-    // This may need to be improved to check based on parent form instead of body
-
     return isCreatePage() || isEditPage();
 }

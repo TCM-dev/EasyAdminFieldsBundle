@@ -1,8 +1,28 @@
-.field-logs table {
+.field-logs .log__list {
+    padding: 0.5em;
+}
+
+.field-logs .log {
+    padding: 0.25em 0;
+}
+
+.field-logs .log__container {
+    border-radius: 5px;
+    width: 100%;
+    display: flex;
+}
+
+.field-logs .log__container > .type {
+    width: 100px;
+    min-width: 100px;
+}
+
+.field-logs .log__container > :not(.type) {
     width: 100%;
 }
 
-.field-logs .log td, .field-logs .log th {
+.field-logs .log__container > div {
+    display: inline-block;
     padding: 0.5em;
     line-height: 1.75;
 }
@@ -12,27 +32,52 @@
 }
 
 .field-logs .log code {
-    background: #333;
-    padding: 1em;
-    border-radius: 5px;
     color: #b8b1fc;
-    white-space: nowrap;
     display: block;
+    padding-right: 6em;
+    position: relative;
 }
 
-.field-logs .log--ERROR {
+.field-logs .log code button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 5px;
+    border: 0;
+    background: #444;
+    color: #fafafa;
+}
+
+.field-logs .log code button:active {
+    background: #555;
+}
+
+.field-logs .log code button span {
+    margin-left: 0.5em;
+}
+
+.field-logs .log--ERROR .log__container {
     background: rgba(255, 0, 0, 0.1);
 }
 
-.field-logs .log--SUCCESS {
+.field-logs .log--SUCCESS .log__container {
     background: rgba(0, 255, 0, 0.05);
 }
 
-.field-logs .log--WARNING {
+.field-logs .log--DEBUG .log__container {
+    color: #b8b1fc;
+    background: #333;
+}
+
+.field-logs .log--WARNING .log__container {
     background: rgba(255, 227, 15, 0.1);
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 768px) {
+    .field-logs dt {
+        margin-bottom: 1em !important;
+    }
+
     .field-logs {
         display: flex !important;
         flex-direction: column;
@@ -40,5 +85,9 @@
 
     .field-logs .type {
         display: none;
+    }
+
+    .field-logs .log__list {
+        padding: 0;
     }
 }

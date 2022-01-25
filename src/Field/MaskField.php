@@ -32,14 +32,13 @@ final class MaskField
     public static function new(string $propertyName, $label = null): self
     {
         $self = new self();
-        $uniqID = $self->getAsDto()->getUniqueId();
 
         return $self
             ->setProperty($propertyName)
             ->setLabel($label)
             ->setFormType(ChoiceType::class)
             ->addCssClass('field-select')
-            ->addCssClass("maskfield maskfield-$uniqID")
+            ->addCssClass("field-mask")
             ->setCustomOption(self::OPTION_CHOICES, null)
             ->setCustomOption(self::OPTION_RENDER_AS_BADGES, null)
             ->setCustomOption(self::OPTION_RENDER_EXPANDED, false)
@@ -130,33 +129,15 @@ final class MaskField
 
     public function map(array $map): self
     {
-        $this->addHtmlContentsToHead($this->getMapHTML($map));
+        $map_json = [];
+        foreach ($map as $key => $item) {
+            $map_json[] = [
+                'value' => $key,
+                'propertyNames' => $item
+            ];
+        }
+        $this->setFormTypeOption('attr.data-eaf-map', json_encode($map_json, JSON_THROW_ON_ERROR));
 
         return $this;
-    }
-
-    private function getMapHTML(array $map)
-    {
-        $uniqID = $this->dto->getUniqueId();
-
-        $body = "<div class='maskfield-map maskfield-map-$uniqID'>";
-
-        foreach ($map as $key => $items) {
-            $json_values = $this->getJSONValuesFromItems($items);
-            $body .= "<div data-key='$key' data-values='$json_values'></div>";
-        }
-
-        $body .= "</div>";
-
-        return $body;
-    }
-
-    private function getJSONValuesFromItems(array $items): string
-    {
-        $json = json_encode($items);
-        $json = explode('.', $json);
-        $json = implode('_', $json);
-
-        return $json;
     }
 }

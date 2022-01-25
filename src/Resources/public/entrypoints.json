@@ -1,6 +1,10 @@
 {
   "entrypoints": {
     "main": {
+      "css": [
+        "./main.css",
+        "./main.rtl.css"
+      ],
       "js": [
         "./main.js"
       ]
