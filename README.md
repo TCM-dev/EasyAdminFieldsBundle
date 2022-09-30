@@ -30,6 +30,8 @@ public function configureAssets(): Assets
 
 ### Mask field
 
+The mask field allows you to show or hide other fields depending on one field's value
+
 #### Usage
 
 - With the MaskField wrapper
