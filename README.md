@@ -1,8 +1,36 @@
 # EasyAdminFieldsBundle
 
-## Mask field
+## Installation
 
-### Usage
+Run the following command to install EasyAdminFields in your application:
+
+```shell
+$ composer require insitaction/easyadmin-fields-bundle
+```
+
+Use the bundle assets
+
+```php
+// DashboardController.php
+
+use Insitaction\EasyAdminFieldsBundle\Asset\AssetPackage;
+
+public function configureAssets(): Assets
+{
+    $jsAsset = Asset::new('app.js')->package(AssetPackage::PACKAGE_NAME);
+    $cssAsset = Asset::new('app.css')->package(AssetPackage::PACKAGE_NAME);
+
+    return parent::configureAssets()
+        ->addJsFile($jsAsset)
+        ->addCssFile($cssAsset);
+}
+```
+
+## Fields
+
+### Mask field
+
+#### Usage
 
 - With the MaskField wrapper
 
@@ -29,7 +57,7 @@ BooleanField::new('hasAuthor')
     ])
 ```
 
-### Configuration
+#### Configuration
 
 The map configuration works like this:
 
