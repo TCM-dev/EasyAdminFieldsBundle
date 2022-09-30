@@ -17,6 +17,21 @@ use Insitaction\EasyAdminFieldsBundle\Asset\AssetPackage;
 
 public function configureAssets(): Assets
 {
+    $assets = parent::configureAssets();
+    
+    return EasyAdminFieldsBundle::configureAssets($assets);
+}
+```
+
+Without the helper method
+
+```php
+// DashboardController.php
+
+use Insitaction\EasyAdminFieldsBundle\Asset\AssetPackage;
+
+public function configureAssets(): Assets
+{
     $jsAsset = Asset::new('app.js')->package(AssetPackage::PACKAGE_NAME);
     $cssAsset = Asset::new('app.css')->package(AssetPackage::PACKAGE_NAME);
 

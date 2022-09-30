@@ -3,6 +3,8 @@
 namespace Insitaction\EasyAdminFieldsBundle;
 
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Asset;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
@@ -20,5 +22,15 @@ class EasyAdminFieldsBundle extends AbstractBundle
             ->set(AssetPackage::class)
             ->arg(0, service('request_stack'))
             ->tag('assets.package', ['package' => AssetPackage::PACKAGE_NAME]);
+    }
+
+    public static function configureAssets(Assets $asset): Assets
+    {
+        $jsAsset = Asset::new('app.js')->package(AssetPackage::PACKAGE_NAME);
+        $cssAsset = Asset::new('app.css')->package(AssetPackage::PACKAGE_NAME);
+
+        return $asset
+            ->addJsFile($jsAsset)
+            ->addCssFile($cssAsset);
     }
 }
