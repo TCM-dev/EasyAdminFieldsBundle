@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "module": "es2015",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "removeComments": true,
-    "target": "ES5",
+    "target": "es2015",
     "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
     "jsx": "react"
   },
   "include": [

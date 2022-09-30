@@ -1,0 +1,12 @@
+{
+  "entrypoints": {
+    "app": {
+      "css": [
+        "/bundles/easyadminfields/app.31d6cfe0.css"
+      ],
+      "js": [
+        "/bundles/easyadminfields/app.24046367.js"
+      ]
+    }
+  }
+}

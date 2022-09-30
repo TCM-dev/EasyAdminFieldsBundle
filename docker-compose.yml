@@ -3,8 +3,10 @@ services:
   php:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/php/Dockerfile
     volumes:
-      - './:/usr/src/app'
+      - './:/usr/src'
+      # Misc
+      - '~/.config/composer:/.composer'
     restart: on-failure
     user: 1000:1000

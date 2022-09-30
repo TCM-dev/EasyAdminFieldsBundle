@@ -1,9 +1,0 @@
-{
-  "bundles/easyadmin-fields/main.css": "./main.css",
-  "bundles/easyadmin-fields/main.js": "./main.js",
-  "bundles/easyadmin-fields/app.css": "./app.css",
-  "bundles/easyadmin-fields/app.js": "./app.js",
-  "bundles/easyadmin-fields/main.css.map": "./main.css.map",
-  "bundles/easyadmin-fields/main.js.map": "./main.js.map",
-  "bundles/easyadmin-fields/app.css.map": "./app.css.map"
-}
