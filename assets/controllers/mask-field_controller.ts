@@ -25,6 +25,11 @@ export default class extends Controller<HTMLInputElement> {
     handle(input: HTMLInputElement) {
         const value = getValue(input);
 
+        // Do not handle multiple values input
+        if (Array.isArray(value)) {
+            return;
+        }
+
         const mapElement = getMapElement(value, this.map);
         const fields = getMapFields(this.map);
 

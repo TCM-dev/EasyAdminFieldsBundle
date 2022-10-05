@@ -1,4 +1,10 @@
-export const getValue = (input: HTMLInputElement): string => {
+import {TomInput} from "tom-select/src/types/core";
+
+export const getValue = (input: HTMLInputElement | TomInput): string | string[] => {
+    if (isTomSelect(input)) {
+        return input.tomselect.getValue()
+    }
+
     if (input.getAttribute('type') === 'checkbox') {
         // we want to return a string value
         return input.checked ? "true" : "false";
@@ -7,11 +13,15 @@ export const getValue = (input: HTMLInputElement): string => {
     return input.value;
 }
 
+export const isTomSelect = (element: HTMLSelectElement | TomInput): element is TomInput => {
+    return (element as TomInput).tomselect !== undefined;
+}
+
 export const getFieldFormGroup = (field: string): HTMLElement => {
     // find corresponding input
     const input: HTMLElement = document.querySelector(`[name*="[${field}]"]`);
 
-    if(!input) {
+    if (!input) {
         return null;
     }
 
@@ -25,7 +35,7 @@ export const getFormGroupField = (formGroup: HTMLElement): HTMLInputElement => {
 export const hideField = (field: string) => {
     const formGroup: HTMLElement = getFieldFormGroup(field);
 
-    if(!formGroup) {
+    if (!formGroup) {
         return;
     }
 
@@ -35,7 +45,7 @@ export const hideField = (field: string) => {
 export const showField = (field: string) => {
     const formGroup: HTMLElement = getFieldFormGroup(field);
 
-    if(!formGroup) {
+    if (!formGroup) {
         return;
     }
 

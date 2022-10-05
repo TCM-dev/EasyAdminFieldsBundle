@@ -103,3 +103,66 @@ With this map configuration :
 
 The `field1` field is shown when either `A` or `B` is the input value, the `field2` field is shown when either `B`
 or `C` is the input value
+
+### Dependent field
+
+The dependent field can wrap ChoiceField or AssociationField to make their available options dynamic If any of the field
+dependencies is updated, a request is emitted to retrieve new options for the dependent field
+
+#### Usage
+
+- With the DependentField wrapper
+
+```php
+ DependentField::adapt(
+    AssociationField::new('author'),
+    [
+        'callback_url' => $this->urlGenerator->generate('authors', [], UrlGeneratorInterface::ABSOLUTE_URL),
+        'dependencies' => ['gender'],
+        'fetch_on_init' => true
+    ]
+)
+```
+
+#### Configuration
+
+##### Dependencies
+
+The `dependencies` array is an array of string corresponding to other fields name
+
+With this dependencies configuration, the callback will be called everytime the `gender` field is updated
+
+```php
+'dependencies' => ['gender']
+```
+
+##### Callback Url
+
+The `callback_url` must be an url that accepts a GET request which returns data of this format:
+
+```json
+[
+  {
+    "text": "John Doe",
+    "value": 1
+  },
+  {
+    "text": "John Snow",
+    "value": 2
+  }
+]
+```
+
+The following query parameters will be sent with the request (this corresponds to the dependencies array and the
+corresponding field value)
+
+```json
+{
+  "gender": "Male"
+}
+```
+
+##### Fetch on init
+
+The `fetch_on_init` parameter defines wheter or not the callback should be executed immediatly after the field is
+mounted
