@@ -4,16 +4,19 @@ namespace Insitaction\EasyAdminFieldsBundle\Field\Configurator;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\ChoiceConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use Insitaction\EasyAdminFieldsBundle\Field\EnumField;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use function Symfony\Component\String\u;
 
-class EnumConfigurator
+class EnumConfigurator implements FieldConfiguratorInterface
 {
     public function __construct(private readonly TranslatorInterface $translator)
     {
@@ -31,31 +34,10 @@ class EnumConfigurator
 
         $choices = $this->getChoices($field->getCustomOption(ChoiceField::OPTION_CHOICES), $entityDto, $field);
         if (empty($choices)) {
-            if (\PHP_VERSION_ID >= 80100 && ($enumTypeClass = $field->getDoctrineMetadata()->get('enumType')) && enum_exists($enumTypeClass)) {
+            if (($enumTypeClass = $field->getDoctrineMetadata()->get('enumType')) && enum_exists($enumTypeClass)) {
+                $field->setFormType(EnumType::class);
+                $field->setFormTypeOption('class', $enumTypeClass);
                 $choices = $enumTypeClass::cases();
-            } else {
-                throw new \InvalidArgumentException(sprintf('The "%s" choice field must define its possible choices using the setChoices() method.', $field->getProperty()));
-            }
-        }
-
-        //support for enums
-        if (\PHP_VERSION_ID >= 80100) {
-            $elementIsEnum = array_unique(array_map(function ($element) {
-                return \is_object($element) && enum_exists($element::class);
-            }, $choices));
-            $allAreEnums = false === \in_array(false, $elementIsEnum, true);
-
-            if ($allAreEnums) {
-                $isAssoc = array_values($choices) !== $choices;
-                if ($isAssoc) {
-                    array_walk($choices, function (&$choice) {
-                        $choice = $choice->value;
-                    });
-                } else {
-                    $choices = array_reduce($choices, function ($elements, $enum) {
-                        return $elements + [$enum->value => $enum->value];
-                    }, []);
-                }
             }
         }
 
@@ -93,11 +75,10 @@ class EnumConfigurator
         $translationParameters = $context->getI18n()->getTranslationParameters();
         $translationDomain = $context->getI18n()->getTranslationDomain();
         $selectedChoices = [];
-        $flippedChoices = array_flip($choices);
         // $value is a scalar for single selections and an array for multiple selections
         foreach ((array)$fieldValue as $selectedValue) {
-            if (null !== $selectedChoice = $flippedChoices[$selectedValue] ?? null) {
-                $choiceValue = $this->translator->trans($selectedChoice, $translationParameters, $translationDomain);
+            if($selectedChoice = $enumTypeClass::tryFrom($selectedValue)) {
+                $choiceValue = $this->translator->trans($selectedChoice->name, $translationParameters, $translationDomain);
                 $selectedChoices[] = $isRenderedAsBadge
                     ? sprintf('<span class="%s">%s</span>', $this->getBadgeCssClass($badgeSelector, $selectedValue, $field), $choiceValue)
                     : $choiceValue;
