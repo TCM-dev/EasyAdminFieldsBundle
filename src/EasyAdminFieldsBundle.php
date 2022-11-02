@@ -5,6 +5,7 @@ namespace Insitaction\EasyAdminFieldsBundle;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Asset;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use Insitaction\EasyAdminFieldsBundle\Field\Configurator\EnumConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
@@ -22,6 +23,11 @@ class EasyAdminFieldsBundle extends AbstractBundle
             ->set(AssetPackage::class)
             ->arg(0, service('request_stack'))
             ->tag('assets.package', ['package' => AssetPackage::PACKAGE_NAME]);
+
+        $services
+            ->set(EnumConfigurator::class)
+            ->arg(0, service('translator'))
+            ->tag('ea.field_configurator');
     }
 
     public static function configureAssets(Assets $asset): Assets
