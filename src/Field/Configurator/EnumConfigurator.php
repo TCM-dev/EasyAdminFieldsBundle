@@ -1,0 +1,141 @@
+<?php
+
+namespace Insitaction\EasyAdminFieldsBundle\Field\Configurator;
+
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\ChoiceConfigurator;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use Insitaction\EasyAdminFieldsBundle\Field\EnumField;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use function Symfony\Component\String\u;
+
+class EnumConfigurator
+{
+    public function __construct(private readonly TranslatorInterface $translator)
+    {
+    }
+
+    public function supports(FieldDto $field, EntityDto $entityDto): bool
+    {
+        return EnumField::class === $field->getFieldFqcn();
+    }
+
+    public function configure(FieldDto $field, EntityDto $entityDto, AdminContext $context): void
+    {
+        $isExpanded = $field->getCustomOption(ChoiceField::OPTION_RENDER_EXPANDED);
+        $isMultipleChoice = $field->getCustomOption(ChoiceField::OPTION_ALLOW_MULTIPLE_CHOICES);
+
+        $choices = $this->getChoices($field->getCustomOption(ChoiceField::OPTION_CHOICES), $entityDto, $field);
+        if (empty($choices)) {
+            if (\PHP_VERSION_ID >= 80100 && ($enumTypeClass = $field->getDoctrineMetadata()->get('enumType')) && enum_exists($enumTypeClass)) {
+                $choices = $enumTypeClass::cases();
+            } else {
+                throw new \InvalidArgumentException(sprintf('The "%s" choice field must define its possible choices using the setChoices() method.', $field->getProperty()));
+            }
+        }
+
+        //support for enums
+        if (\PHP_VERSION_ID >= 80100) {
+            $elementIsEnum = array_unique(array_map(function ($element) {
+                return \is_object($element) && enum_exists($element::class);
+            }, $choices));
+            $allAreEnums = false === \in_array(false, $elementIsEnum, true);
+
+            if ($allAreEnums) {
+                $isAssoc = array_values($choices) !== $choices;
+                if ($isAssoc) {
+                    array_walk($choices, function (&$choice) {
+                        $choice = $choice->value;
+                    });
+                } else {
+                    $choices = array_reduce($choices, function ($elements, $enum) {
+                        return $elements + [$enum->value => $enum->value];
+                    }, []);
+                }
+            }
+        }
+
+        $field->setFormTypeOptionIfNotSet('choices', $choices);
+        $field->setFormTypeOptionIfNotSet('multiple', $isMultipleChoice);
+        $field->setFormTypeOptionIfNotSet('expanded', $isExpanded);
+
+        if ($isExpanded && ChoiceField::WIDGET_AUTOCOMPLETE === $field->getCustomOption(ChoiceField::OPTION_WIDGET)) {
+            throw new \InvalidArgumentException(sprintf('The "%s" choice field wants to be displayed as an autocomplete widget and as an expanded list of choices at the same time, which is not possible. Use the renderExpanded() and renderAsNativeWidget() methods to change one of those options.', $field->getProperty()));
+        }
+
+        if (null === $field->getCustomOption(ChoiceField::OPTION_WIDGET)) {
+            $field->setCustomOption(ChoiceField::OPTION_WIDGET, $isExpanded ? ChoiceField::WIDGET_NATIVE : ChoiceField::WIDGET_AUTOCOMPLETE);
+        }
+
+        if (ChoiceField::WIDGET_AUTOCOMPLETE === $field->getCustomOption(ChoiceField::OPTION_WIDGET)) {
+            $field->setFormTypeOption('attr.data-ea-widget', 'ea-autocomplete');
+            $field->setDefaultColumns($isMultipleChoice ? 'col-md-8 col-xxl-6' : 'col-md-6 col-xxl-5');
+        }
+
+        $field->setFormTypeOptionIfNotSet('placeholder', '');
+
+        // the value of this form option must be a string to properly propagate it as an HTML attribute value
+        $field->setFormTypeOption('attr.data-ea-autocomplete-render-items-as-html', $field->getCustomOption(ChoiceField::OPTION_ESCAPE_HTML_CONTENTS) ? 'false' : 'true');
+
+        $fieldValue = $field->getValue();
+        $isIndexOrDetail = \in_array($context->getCrud()->getCurrentPage(), [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true);
+        if (null === $fieldValue || !$isIndexOrDetail) {
+            return;
+        }
+
+        $badgeSelector = $field->getCustomOption(ChoiceField::OPTION_RENDER_AS_BADGES);
+        $isRenderedAsBadge = null !== $badgeSelector && false !== $badgeSelector;
+
+        $translationParameters = $context->getI18n()->getTranslationParameters();
+        $translationDomain = $context->getI18n()->getTranslationDomain();
+        $selectedChoices = [];
+        $flippedChoices = array_flip($choices);
+        // $value is a scalar for single selections and an array for multiple selections
+        foreach ((array)$fieldValue as $selectedValue) {
+            if (null !== $selectedChoice = $flippedChoices[$selectedValue] ?? null) {
+                $choiceValue = $this->translator->trans($selectedChoice, $translationParameters, $translationDomain);
+                $selectedChoices[] = $isRenderedAsBadge
+                    ? sprintf('<span class="%s">%s</span>', $this->getBadgeCssClass($badgeSelector, $selectedValue, $field), $choiceValue)
+                    : $choiceValue;
+            }
+        }
+        $field->setFormattedValue(implode($isRenderedAsBadge ? '' : ', ', $selectedChoices));
+    }
+
+    private function getChoices($choiceGenerator, EntityDto $entity, FieldDto $field): array
+    {
+        if (null === $choiceGenerator) {
+            return [];
+        }
+
+        if (\is_array($choiceGenerator)) {
+            return $choiceGenerator;
+        }
+
+        return $choiceGenerator($entity->getInstance(), $field);
+    }
+
+    private function getBadgeCssClass($badgeSelector, $value, FieldDto $field): string
+    {
+        $commonBadgeCssClass = 'badge';
+
+        if (true === $badgeSelector) {
+            $badgeType = 'badge-secondary';
+        } elseif (\is_array($badgeSelector)) {
+            $badgeType = $badgeSelector[$value] ?? 'badge-secondary';
+        } elseif (\is_callable($badgeSelector)) {
+            $badgeType = $badgeSelector($value, $field);
+            if (!\in_array($badgeType, ChoiceField::VALID_BADGE_TYPES, true)) {
+                throw new \RuntimeException(sprintf('The value returned by the callable passed to the "renderAsBadges()" method must be one of the following valid badge types: "%s" ("%s" given).', implode(', ', ChoiceField::VALID_BADGE_TYPES), $badgeType));
+            }
+        }
+
+        $badgeTypeCssClass = empty($badgeType) ? '' : u($badgeType)->ensureStart('badge-')->toString();
+
+        return $commonBadgeCssClass . ' ' . $badgeTypeCssClass;
+    }
+}
