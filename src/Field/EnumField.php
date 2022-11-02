@@ -12,16 +12,20 @@ class EnumField
 {
     public static function new(string $propertyName, string $enumFqn, string $pageName, $label = null): FieldInterface
     {
-        $enum = new \ReflectionEnum($enumFqn);
-
         $field = ChoiceField::new($propertyName, $label)
-            ->setChoices($enum->getCases())
             ->setFormType(EnumType::class)
             ->setFormTypeOption('class', $enumFqn);
 
+        if (!enum_exists($enumFqn)) {
+            return $field;
+        }
+
+        /** @var BackedEnum $enumFqn */
+        $field->setChoices($enumFqn::cases());
+
         if (in_array($pageName, [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true)) {
             $field->setChoices(array_reduce(
-                $enum->getCases(),
+                $enumFqn::cases(),
                 static fn(array $choices, $enum) => $choices + [$enum->name => $enum->value],
                 [],
             ));
