@@ -10,13 +10,12 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 
 class EnumField
 {
-    public static function new(string $propertyName, string $enum, array $choices, string $pageName, $label = null): FieldInterface
+    public static function new(string $propertyName, array $choices, string $pageName, $label = null): FieldInterface
     {
 
         $field = ChoiceField::new($propertyName, $label)
             ->setChoices($choices)
-            ->setFormType(EnumType::class)
-            ->setFormTypeOption('class', $enum);
+            ->setFormType(EnumType::class);
 
         if (in_array($pageName, [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true)) {
             $field->setChoices(array_reduce(
