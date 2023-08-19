@@ -13,7 +13,7 @@ Use the bundle assets
 ```php
 // DashboardController.php
 
-use Insitaction\EasyAdminFieldsBundle\Asset\AssetPackage;
+use Insitaction\EasyAdminFieldsBundle\EasyAdminFieldsBundle;
 
 public function configureAssets(): Assets
 {
