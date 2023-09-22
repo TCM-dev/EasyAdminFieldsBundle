@@ -29,6 +29,13 @@ export const getFieldFormGroup = (field: string): HTMLElement => {
 }
 
 export const getFieldFormGroups = (field: string): HTMLElement[] => {
+    // Check if we can find a form group directly (mainly for collection fields)
+    const formGroup: HTMLElement = document.querySelector(`[data-prototype*="_${field}__"]`)
+
+    if (formGroup) {
+        return [formGroup];
+    }
+
     // find corresponding inputs
     const inputs: NodeListOf<HTMLElement> = document.querySelectorAll(`[name*="[${field}]"]`);
 
@@ -39,11 +46,23 @@ export const getFormGroupField = (formGroup: HTMLElement): HTMLInputElement => {
     return formGroup.querySelector('select, input, textarea');
 }
 
+export const getFormGroupFields = (formGroup: HTMLElement): NodeListOf<HTMLInputElement> => {
+    return formGroup.querySelectorAll('select, input, textarea');
+}
+
 export const hideField = (field: string) => {
     const formGroups: HTMLElement[] = getFieldFormGroups(field);
 
     formGroups.forEach(formGroup => {
         formGroup.style.display = "none";
+    })
+
+    formGroups.forEach(formGroup => {
+        const inputs = getFormGroupFields(formGroup);
+
+        [...inputs].forEach(input => {
+            input.setAttribute('disabled', 'mask');
+        })
     })
 }
 
@@ -52,6 +71,16 @@ export const showField = (field: string) => {
 
     formGroups.forEach(formGroup => {
         formGroup.style.display = null;
+    })
+
+    formGroups.forEach(formGroup => {
+        const inputs = getFormGroupFields(formGroup);
+
+        [...inputs].forEach(input => {
+            if(input.getAttribute('disabled') === 'mask') {
+                input.removeAttribute('disabled');
+            }
+        })
     })
 }
 
