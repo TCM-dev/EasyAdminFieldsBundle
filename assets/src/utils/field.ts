@@ -25,7 +25,14 @@ export const getFieldFormGroup = (field: string): HTMLElement => {
         return null;
     }
 
-    return input.closest('.form-group');
+    return getInputClosestFormGroup(input);
+}
+
+export const getFieldFormGroups = (field: string): HTMLElement[] => {
+    // find corresponding inputs
+    const inputs: NodeListOf<HTMLElement> = document.querySelectorAll(`[name*="[${field}]"]`);
+
+    return [...inputs].map(getInputClosestFormGroup);
 }
 
 export const getFormGroupField = (formGroup: HTMLElement): HTMLInputElement => {
@@ -33,21 +40,21 @@ export const getFormGroupField = (formGroup: HTMLElement): HTMLInputElement => {
 }
 
 export const hideField = (field: string) => {
-    const formGroup: HTMLElement = getFieldFormGroup(field);
+    const formGroups: HTMLElement[] = getFieldFormGroups(field);
 
-    if (!formGroup) {
-        return;
-    }
-
-    formGroup.style.display = "none";
+    formGroups.forEach(formGroup => {
+        formGroup.style.display = "none";
+    })
 }
 
 export const showField = (field: string) => {
-    const formGroup: HTMLElement = getFieldFormGroup(field);
+    const formGroups: HTMLElement[] = getFieldFormGroups(field);
 
-    if (!formGroup) {
-        return;
-    }
+    formGroups.forEach(formGroup => {
+        formGroup.style.display = null;
+    })
+}
 
-    formGroup.style.display = null;
+export const getInputClosestFormGroup = (input: HTMLElement): HTMLElement => {
+    return input.closest('.js-form-group-override') || input.closest('.form-group');
 }
