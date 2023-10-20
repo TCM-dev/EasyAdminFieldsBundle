@@ -6,8 +6,7 @@
   "require": {
     "php": ">=8.0",
     "symfony/framework-bundle": "^v6.1",
-    "easycorp/easyadmin-bundle": "^4",
-    "symfony/webpack-encore-bundle": "^1.15|^2"
+    "easycorp/easyadmin-bundle": "^4"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
