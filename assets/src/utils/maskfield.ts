@@ -1,8 +1,24 @@
 export const getMap = (input: HTMLInputElement): EasyAdminFields.Map => {
-    const data = input.getAttribute('data-mask-field-map')
+    const map = getOptions(input).map
+    // const identifier_type = getOptions(input).identifier_type;
+
+    return map;
+
+
+    // const data = input.getAttribute('data-mask-field-map')
+    //
+    // if (!data) {
+    //     return [];
+    // }
+    //
+    // return JSON.parse(data);
+}
+
+export const getOptions = (input: HTMLInputElement): EasyAdminFields.MaskFieldOptions => {
+    const data = input.getAttribute('data-mask-field-options')
 
     if (!data) {
-        return [];
+        return {map: [], identifier_type: 'value'};
     }
 
     return JSON.parse(data);
