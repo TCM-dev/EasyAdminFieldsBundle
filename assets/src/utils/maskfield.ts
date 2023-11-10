@@ -1,7 +1,7 @@
 export const getMap = (input: HTMLInputElement): EasyAdminFields.Map => {
     const map = getOptions(input).map
     // const identifier_type = getOptions(input).identifier_type;
-
+console.log(getOptions(input))
     return map;
 
 
