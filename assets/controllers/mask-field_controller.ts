@@ -1,6 +1,7 @@
 import {Controller} from '@hotwired/stimulus';
 import {getFormGroupField, getValue, hideField, showField} from '../src/utils/field';
-import {getMap, getMapElement, getMapFields} from '../src/utils/maskfield';
+import {getMap, getMapElement, getMapElements, getMapFields} from '../src/utils/maskfield';
+import {removeDuplicates} from "../src/utils/array";
 
 export default class extends Controller<HTMLInputElement> {
     private map: EasyAdminFields.Map;
@@ -24,26 +25,35 @@ export default class extends Controller<HTMLInputElement> {
 
     handle(input: HTMLInputElement) {
         const value = getValue(input);
+        const mapFields = getMapFields(this.map);
 
-        // Do not handle multiple values input
         if (Array.isArray(value)) {
+            const mapElements = getMapElements(value, this.map);
+            const fields = mapElements.map(mapElement => mapElement.fields).flat();
+
+            const finalFields = removeDuplicates(fields);
+
+            this.handleFieldsVisibility(mapFields, finalFields)
+
             return;
         }
 
         const mapElement = getMapElement(value, this.map);
-        const fields = getMapFields(this.map);
 
-        /*
-        - hide every fields
-        - show concerned fields again
-         */
+        this.handleFieldsVisibility(mapFields, mapElement?.fields)
+    }
 
-        // Hide every fields
-        fields.forEach(hideField)
+    /**
+     - hide every field
+     - show concerned fields again
+     */
+    handleFieldsVisibility(toHide: string[], toShow: string[]) {
+        toHide.forEach(hideField)
 
-        if (mapElement) {
+        if (toShow) {
             // make corresponding fields visible
-            mapElement.fields.forEach(showField)
+            toShow.forEach(showField)
         }
     }
+
 }
