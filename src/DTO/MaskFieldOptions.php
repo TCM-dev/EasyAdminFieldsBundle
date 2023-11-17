@@ -4,10 +4,11 @@ namespace Insitaction\EasyAdminFieldsBundle\DTO;
 
 final class MaskFieldOptions
 {
+    // TODO MERGE ou INTERSECT
     public const IDENTIFIER_TYPE_LABEL = 'label';
     public const IDENTIFIER_TYPE_VALUE = 'value';
 
-    private string $identifierType = 'value';
+    private string $multipleSelectMode = 'value';
     /**
      * @var array<{value: string, fields: array<string>}>
      */
@@ -17,7 +18,7 @@ final class MaskFieldOptions
     {
         return [
             'map' => $this->getMap(),
-            'identifierType' => $this->getIdentifierType(),
+            'identifierType' => $this->getMultipleSelectMode(),
         ];
     }
 
@@ -44,15 +45,15 @@ final class MaskFieldOptions
         return $this->map;
     }
 
-    public function setIdentifierType(string $identifierType): self
+    public function setMultipleSelectMode(string $multipleSelectMode): self
     {
-        $this->identifierType = $identifierType;
+        $this->multipleSelectMode = $multipleSelectMode;
 
         return $this;
     }
 
-    public function getIdentifierType(): string
+    public function getMultipleSelectMode(): string
     {
-        return $this->identifierType;
+        return $this->multipleSelectMode;
     }
 }
