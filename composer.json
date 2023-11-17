@@ -1,5 +1,5 @@
 {
-  "version": "4.0.6",
+  "version": "4.0.7",
   "name": "insitaction/easyadmin-fields-bundle",
   "description": "Set of easyadmin fields and useful helpers for Insitaction",
   "type": "symfony-bundle",

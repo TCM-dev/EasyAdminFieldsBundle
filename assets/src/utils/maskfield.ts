@@ -45,3 +45,7 @@ export const getMapFields = (map: EasyAdminFields.Map): string[] => {
 export const getMapElement = (value: string, map: EasyAdminFields.Map): EasyAdminFields.MapElement | undefined => {
     return map.find(mapElement => mapElement.value == value);
 }
+
+export const getMapElements = (values: string[], map: EasyAdminFields.Map): EasyAdminFields.MapElement[] => {
+    return map.filter(mapElement => values.includes(mapElement.value));
+}
