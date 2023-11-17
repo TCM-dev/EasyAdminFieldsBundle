@@ -18,7 +18,7 @@ class MaskField
             ->setFormTypeOptions([
                 'row_attr' => [
                     'data-controller' => 'mask-field',
-                    'data-mask-field-options' => json_encode($options->__serialize(), JSON_THROW_ON_ERROR),
+                    'data-mask-field-options' => json_encode($options->serialize(), JSON_THROW_ON_ERROR),
                 ],
             ]);
     }

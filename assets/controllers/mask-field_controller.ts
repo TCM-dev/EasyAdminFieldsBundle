@@ -1,6 +1,6 @@
 import {Controller} from '@hotwired/stimulus';
 import {getFormGroupField, getValue, hideField, showField} from '../src/utils/field';
-import {getMap, getMapElement, getMapFields} from '../src/utils/maskfield';
+import {getMap, getMapElement, getMapFields, getOptions} from '../src/utils/maskfield';
 
 export default class extends Controller<HTMLInputElement> {
     private map: EasyAdminFields.Map;
