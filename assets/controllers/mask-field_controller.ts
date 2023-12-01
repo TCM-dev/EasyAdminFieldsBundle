@@ -1,13 +1,16 @@
 import {Controller} from '@hotwired/stimulus';
 import {getFormGroupField, getValue, hideField, showField} from '../src/utils/field';
-import {getMap, getMapElement, getMapElements, getMapFields} from '../src/utils/maskfield';
+import {getMapElement, getMapElements, getMapFields} from '../src/utils/maskfield';
 import {removeDuplicates} from "../src/utils/array";
 
 export default class extends Controller<HTMLInputElement> {
-    private map: EasyAdminFields.Map;
+    static values = {
+        options: Object,
+    };
+
+    declare readonly optionsValue: EasyAdminFields.MaskFieldOptions
 
     connect() {
-        this.map = getMap(this.element);
         this.element.addEventListener('input', this.handleEvent.bind(this))
         const input = getFormGroupField(this.element);
         this.handle(input);
@@ -25,10 +28,10 @@ export default class extends Controller<HTMLInputElement> {
 
     handle(input: HTMLInputElement) {
         const value = getValue(input);
-        const mapFields = getMapFields(this.map);
+        const mapFields = getMapFields(this.optionsValue.map);
 
         if (Array.isArray(value)) {
-            const mapElements = getMapElements(value, this.map);
+            const mapElements = getMapElements(value, this.optionsValue.map);
             const fields = mapElements.map(mapElement => mapElement.fields).flat();
 
             const finalFields = removeDuplicates(fields);
@@ -38,7 +41,7 @@ export default class extends Controller<HTMLInputElement> {
             return;
         }
 
-        const mapElement = getMapElement(value, this.map);
+        const mapElement = getMapElement(value, this.optionsValue.map);
 
         this.handleFieldsVisibility(mapFields, mapElement?.fields)
     }

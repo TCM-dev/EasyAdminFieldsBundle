@@ -5,7 +5,7 @@ export type MapElement = {
 
 export type MaskFieldOptions = {
     map: Map;
-    identifier_type: string;
+    multipleSelectMode: string;
 }
 
 export type Map = MapElement[]

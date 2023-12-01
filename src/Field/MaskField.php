@@ -4,7 +4,6 @@ namespace Insitaction\EasyAdminFieldsBundle\Field;
 
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use Insitaction\EasyAdminFieldsBundle\DTO\MaskFieldOptions;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MaskField
 {
@@ -18,7 +17,7 @@ class MaskField
             ->setFormTypeOptions([
                 'row_attr' => [
                     'data-controller' => 'mask-field',
-                    'data-mask-field-options' => json_encode($options->serialize(), JSON_THROW_ON_ERROR),
+                    'data-mask-field-options-value' => json_encode($options->serialize(), JSON_THROW_ON_ERROR),
                 ],
             ]);
     }
