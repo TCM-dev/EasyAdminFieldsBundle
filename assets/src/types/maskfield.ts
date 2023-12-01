@@ -5,7 +5,7 @@ export type MapElement = {
 
 export type MaskFieldOptions = {
     map: Map;
-    multipleSelectMode: string;
+    multipleSelectMode: "merge" | "intersect";
 }
 
 export type Map = MapElement[]

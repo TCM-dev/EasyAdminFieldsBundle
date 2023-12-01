@@ -4,7 +4,7 @@ export const getOptions = (input: HTMLInputElement): EasyAdminFields.MaskFieldOp
     const data = input.getAttribute('data-mask-field-options')
 
     if (!data) {
-        return {map: [], multipleSelectMode: 'value'};
+        return {map: [], multipleSelectMode: "merge"};
     }
 
     return JSON.parse(data);

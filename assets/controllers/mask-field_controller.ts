@@ -1,7 +1,7 @@
 import {Controller} from '@hotwired/stimulus';
 import {getFormGroupField, getValue, hideField, showField} from '../src/utils/field';
 import {getMapElement, getMapElements, getMapFields} from '../src/utils/maskfield';
-import {removeDuplicates} from "../src/utils/array";
+import {keepArrayIntersections, removeDuplicates} from "../src/utils/array";
 
 export default class extends Controller<HTMLInputElement> {
     static values = {
@@ -27,23 +27,13 @@ export default class extends Controller<HTMLInputElement> {
     }
 
     handle(input: HTMLInputElement) {
+
         const value = getValue(input);
-        const mapFields = getMapFields(this.optionsValue.map);
 
-        if (Array.isArray(value)) {
-            const mapElements = getMapElements(value, this.optionsValue.map);
-            const fields = mapElements.map(mapElement => mapElement.fields).flat();
+        const toHide = this.retrieveTargetedFields();
+        const toShow = this.retrieveVisibleFields(value);
 
-            const finalFields = removeDuplicates(fields);
-
-            this.handleFieldsVisibility(mapFields, finalFields)
-
-            return;
-        }
-
-        const mapElement = getMapElement(value, this.optionsValue.map);
-
-        this.handleFieldsVisibility(mapFields, mapElement?.fields)
+        this.handleFieldsVisibility(toHide, toShow)
     }
 
     /**
@@ -59,4 +49,24 @@ export default class extends Controller<HTMLInputElement> {
         }
     }
 
+    retrieveVisibleFields(value: string | string[]): string[] {
+        if (!Array.isArray(value)) {
+            return getMapElement(value, this.optionsValue.map).fields;
+        }
+
+        const mapElements = getMapElements(value, this.optionsValue.map);
+
+        if (this.optionsValue.multipleSelectMode === "merge") {
+            const fields = mapElements.map(mapElement => mapElement.fields).flat();
+            return removeDuplicates(fields);
+        }
+
+        const fieldGroups = mapElements.map(mapElement => mapElement.fields);
+
+        return keepArrayIntersections(fieldGroups);
+    }
+
+    retrieveTargetedFields(): string[] {
+        return getMapFields(this.optionsValue.map);
+    }
 }
