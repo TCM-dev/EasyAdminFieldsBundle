@@ -5,7 +5,7 @@
   "type": "symfony-bundle",
   "require": {
     "php": ">=8.0",
-    "symfony/framework-bundle": "^v6.1",
+    "symfony/framework-bundle": "^v6.1|^7.0",
     "easycorp/easyadmin-bundle": "^4",
     "symfony/webpack-encore-bundle": "^1.15|^2"
   },

@@ -1,2 +1,9 @@
 /vendor/
 /node_modules/
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/.gitignore
+/.idea/EasyAdminFieldsBundle-TCM-dev.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/php.xml
+/.idea/vcs.xml
