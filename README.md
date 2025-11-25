@@ -1,3 +1,8 @@
+# This package is not maintained anymore
+
+I don't have time for this and I don't work on EasyAdmin backoffice anymore
+I strongly encourage anyone who can to make a better bundle for this, many bugs were encountered, the main paint points are to find a correct selector that won't have any side effects, and make everything compatible with the lifecycle of the forms
+
 # EasyAdminFieldsBundle
 
 ## Installation
